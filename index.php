@@ -1,3 +1,28 @@
+<?php
+session_start();
+
+// Data login statis (sementara)
+$valid_username = "admin";
+$valid_password = "1234";
+
+$error = "";
+
+// Jika tombol login ditekan
+if (isset($_POST['login'])) {
+  $username = $_POST['username'];
+  $password = $_POST['password'];
+
+  // Periksa kecocokan
+  if ($username === $valid_username && $password === $valid_password) {
+    $_SESSION['username'] = $username;
+    header("Location: dashboard.php");
+    exit();
+  } else {
+    $error = "❌ Username atau password salah. Coba lagi ya 🌸";
+  }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -73,17 +98,32 @@
       font-size: 13px;
       margin-top: 15px;
     }
+
+    .error {
+      color: #e63946;
+      background: #ffe6e6;
+      border-radius: 8px;
+      padding: 8px;
+      margin-bottom: 10px;
+      font-size: 13px;
+    }
   </style>
 </head>
 <body>
 
   <div class="login-container">
     <h2>🌷 Login LUNAVIA MART</h2>
-    <form method="POST" action="index.php">
+
+    <?php if ($error): ?>
+      <div class="error"><?= $error ?></div>
+    <?php endif; ?>
+
+    <form method="POST" action="">
       <input type="text" name="username" placeholder="Masukkan Username" required><br>
       <input type="password" name="password" placeholder="Masukkan Password" required><br>
       <button type="submit" name="login">Login</button>
     </form>
+
     <p>Masuklah dan temukan keindahan dalam setiap langkah 🌸</p>
   </div>
 

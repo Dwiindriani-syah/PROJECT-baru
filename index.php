@@ -1,35 +1,9 @@
-<?php
-session_start();
-
-// Data login sederhana (kamu bisa ubah sesuai keinginan)
-$akun = [
-  "username" => "admin",
-  "password" => "1234"
-];
-
-$error = "";
-
-// Kalau tombol login ditekan
-if (isset($_POST['login'])) {
-  $username = $_POST['username'];
-  $password = $_POST['password'];
-
-  // Cek apakah sesuai
-  if ($username === $akun['username'] && $password === $akun['password']) {
-    $_SESSION['username'] = $username;
-    header("Location: dashboard.php");
-    exit;
-  } else {
-    $error = "❌ Username atau password salah, coba lagi ya 🌸";
-  }
-}
-?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - 🌷 Aesthetic Store</title>
+  <title>Login - LUNAVIA MART</title>
 
   <style>
     body {
@@ -49,6 +23,11 @@ if (isset($_POST['login'])) {
       box-shadow: 0 10px 25px rgba(0,0,0,0.1);
       width: 320px;
       text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .login-container:hover {
+      transform: scale(1.02);
     }
 
     h2 {
@@ -94,37 +73,18 @@ if (isset($_POST['login'])) {
       font-size: 13px;
       margin-top: 15px;
     }
-
-    .error {
-      background-color: #ffe0e0;
-      color: #e74c3c;
-      padding: 10px;
-      border-radius: 10px;
-      font-size: 13px;
-      margin-bottom: 10px;
-      animation: fade 0.5s ease;
-    }
-
-    @keyframes fade {
-      from { opacity: 0; transform: translateY(-5px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
   </style>
 </head>
 <body>
 
   <div class="login-container">
-    <h2>🌷 Welcome to Aesthetic Store</h2>
-
-    <?php if ($error) echo "<div class='error'>$error</div>"; ?>
-
-    <form method="POST" action="">
+    <h2>🌷 Login LUNAVIA MART</h2>
+    <form method="POST" action="index.php">
       <input type="text" name="username" placeholder="Masukkan Username" required><br>
       <input type="password" name="password" placeholder="Masukkan Password" required><br>
       <button type="submit" name="login">Login</button>
     </form>
-
-    <p>☁️ Let your dreams bloom here 💫</p>
+    <p>Masuklah dan temukan keindahan dalam setiap langkah 🌸</p>
   </div>
 
 </body>

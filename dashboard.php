@@ -2,134 +2,118 @@
 session_start();
 
 if (!isset($_SESSION['username'])) {
-    header("Location: index.php");
-    exit;
+  header("Location: index.php");
+  exit;
+}
+
+// Data barang
+$kode_barang = ["BRC001", "BRC002", "BRC003", "BRC004", "BRC005"];
+$nama_barang = ["Aurora Mug", "Blush Journal", "Celestia Pen", "Dawn Tote Bag", "Estelle Keychain"];
+$harga_barang = [30000, 25000, 15000, 40000, 10000];
+
+// Acak urutan index barang
+$indeks = array_keys($kode_barang);
+shuffle($indeks);
+
+// Ambil 3 barang acak
+$indeks_terpilih = array_slice($indeks, 0, 3);
+
+$total_harga = [];
+$jumlah_beli = [];
+$grand_total = 0;
+
+foreach ($indeks_terpilih as $i) {
+  $jumlah = rand(1, 3);
+  $jumlah_beli[] = $jumlah;
+  $total = $harga_barang[$i] * $jumlah;
+  $total_harga[] = $total;
+  $grand_total += $total;
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - LUNAVIA MART</title>
-    <style>
-        body {
-            font-family: "Poppins", sans-serif;
-            background: linear-gradient(135deg, #a8edea, #fed6e3);
-            padding: 40px;
-            text-align: center;
-        }
-        h1 {
-            color: #ff8fab;
-        }
-        table {
-            margin: 20px auto;
-            border-collapse: collapse;
-            width: 85%;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 12px;
-        }
-        th {
-            background-color: #ffb3c6;
-            color: white;
-        }
-        tr:nth-child(even) {
-            background-color: #fff0f5;
-        }
-        .logout-btn {
-            background: #ff8fab;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 10px;
-            margin-top: 20px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .logout-btn:hover {
-            background: #ffb3c6;
-        }
-        .grand-total {
-            margin-top: 25px;
-            font-size: 18px;
-            background: white;
-            display: inline-block;
-            padding: 15px 30px;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            color: #ff4d6d;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - LUNAVIA MART</title>
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(135deg, #a8edea, #fed6e3);
+      margin: 0;
+      padding: 20px;
+    }
+    h2 { text-align: center; color: #333; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+    th, td { padding: 12px; text-align: center; }
+    th { background-color: #ff8fab; color: white; }
+    tr:nth-child(even) { background-color: #fff0f5; }
+    .total-box {
+      margin-top: 20px;
+      text-align: right;
+      background: #fff;
+      padding: 15px;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      width: 300px;
+      float: right;
+    }
+    .logout-btn {
+      background-color: #ff8fab;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      float: left;
+      margin-top: 20px;
+      transition: 0.3s;
+    }
+    .logout-btn:hover { background-color: #ffb3c6; }
+  </style>
 </head>
 <body>
 
-    <h1>🌸 LUNAVIA MART 🌸</h1>
-    <h3>Selamat datang, <?php echo $_SESSION['username']; ?> 💕</h3>
-    <h4>Daftar Penjualan Acak Hari Ini</h4>
+  <h2>🌸 Selamat datang, <?= $_SESSION['username']; ?> 🌸</h2>
+  <h3 style="text-align:center;">Daftar Penjualan Acak Hari Ini</h3>
 
-    <?php
-    // Daftar barang (commit 5)
-    $kode_barang = ["BRG001", "BRG002", "BRG003", "BRG004", "BRG005"];
-    $nama_barang = ["Luna Tote Bag", "Vivi Scrunchie", "Aurora Mug", "Blush Journal", "Estelle Keychain"];
-    $harga_barang = [55000, 15000, 30000, 25000, 10000];
+  <table>
+    <tr>
+      <th>Kode Barang</th>
+      <th>Nama Barang</th>
+      <th>Harga (Rp)</th>
+      <th>Jumlah Beli</th>
+      <th>Total Harga (Rp)</th>
+    </tr>
 
-    // Array tambahan (commit 6)
-    $beli = [];
-    $jumlah = [];
-    $total = [];
-    $grandtotal = 0;
+    <?php for ($x = 0; $x < count($indeks_terpilih); $x++) {
+      $i = $indeks_terpilih[$x]; ?>
+      <tr>
+        <td><?= $kode_barang[$i]; ?></td>
+        <td><?= $nama_barang[$i]; ?></td>
+        <td><?= number_format($harga_barang[$i], 0, ',', '.'); ?></td>
+        <td><?= $jumlah_beli[$x]; ?></td>
+        <td><?= number_format($total_harga[$x], 0, ',', '.'); ?></td>
+      </tr>
+    <?php } ?>
+  </table>
 
-    // Logika pembelian random
-    $barang_acak = array_rand($kode_barang, 3); // ambil 3 barang acak
+  <div class="total-box">
+    <p><strong>Total Belanja:</strong></p>
+    <p>Rp <?= number_format($grand_total, 0, ',', '.'); ?></p>
+  </div>
 
-    foreach ($barang_acak as $i => $index) {
-        $beli[$i] = [
-            "kode" => $kode_barang[$index],
-            "nama" => $nama_barang[$index],
-            "harga" => $harga_barang[$index],
-            "jumlah" => rand(1, 5)
-        ];
-        $beli[$i]["total"] = $beli[$i]["harga"] * $beli[$i]["jumlah"];
-        $grandtotal += $beli[$i]["total"]; // 💖 hitung total keseluruhan
-    }
-    ?>
-
-    <table>
-        <tr>
-            <th>Kode Barang</th>
-            <th>Nama Barang</th>
-            <th>Harga (Rp)</th>
-            <th>Jumlah Beli</th>
-            <th>Total Harga (Rp)</th>
-        </tr>
-
-        <?php
-        foreach ($beli as $barang) {
-            echo "<tr>
-                    <td>{$barang['kode']}</td>
-                    <td>{$barang['nama']}</td>
-                    <td>" . number_format($barang['harga'], 0, ',', '.') . "</td>
-                    <td>{$barang['jumlah']}</td>
-                    <td>" . number_format($barang['total'], 0, ',', '.') . "</td>
-                  </tr>";
-        }
-        ?>
-    </table>
-
-    <!-- 💖 Tambahan baru  -->
-    <div class="grand-total">
-        <strong>Grand Total: Rp <?= number_format($grandtotal, 0, ',', '.'); ?></strong>
-    </div>
-
-    <form action='logout.php' method='post'>
-        <button class='logout-btn' type='submit'>Logout</button>
-    </form>
+  <form method="POST" action="logout.php">
+    <button type="submit" class="logout-btn">Logout</button>
+  </form>
 
 </body>
 </html>

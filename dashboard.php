@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-// Cek login
 if (!isset($_SESSION['username'])) {
     header("Location: index.php");
     exit;
@@ -56,6 +55,16 @@ if (!isset($_SESSION['username'])) {
         .logout-btn:hover {
             background: #ffb3c6;
         }
+        .grand-total {
+            margin-top: 25px;
+            font-size: 18px;
+            background: white;
+            display: inline-block;
+            padding: 15px 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            color: #ff4d6d;
+        }
     </style>
 </head>
 <body>
@@ -65,7 +74,7 @@ if (!isset($_SESSION['username'])) {
     <h4>Daftar Penjualan Acak Hari Ini</h4>
 
     <?php
-    // Daftar barang (dari commit 5)
+    // Daftar barang (commit 5)
     $kode_barang = ["BRG001", "BRG002", "BRG003", "BRG004", "BRG005"];
     $nama_barang = ["Luna Tote Bag", "Vivi Scrunchie", "Aurora Mug", "Blush Journal", "Estelle Keychain"];
     $harga_barang = [55000, 15000, 30000, 25000, 10000];
@@ -87,6 +96,7 @@ if (!isset($_SESSION['username'])) {
             "jumlah" => rand(1, 5)
         ];
         $beli[$i]["total"] = $beli[$i]["harga"] * $beli[$i]["jumlah"];
+        $grandtotal += $beli[$i]["total"]; // 💖 hitung total keseluruhan
     }
     ?>
 
@@ -111,6 +121,11 @@ if (!isset($_SESSION['username'])) {
         }
         ?>
     </table>
+
+    <!-- 💖 Tambahan baru  -->
+    <div class="grand-total">
+        <strong>Grand Total: Rp <?= number_format($grandtotal, 0, ',', '.'); ?></strong>
+    </div>
 
     <form action='logout.php' method='post'>
         <button class='logout-btn' type='submit'>Logout</button>
